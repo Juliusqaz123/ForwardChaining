@@ -10,6 +10,8 @@ namespace ForwardChaining
     {
         static void Main(string[] args)
         {
+            ForwardChainingLogic forwardChainingLogic = new ForwardChainingLogic();
+            forwardChainingLogic.Start();
         }
     }
 }
