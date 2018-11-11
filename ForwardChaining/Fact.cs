@@ -26,5 +26,10 @@ namespace ForwardChaining
             return name.GetHashCode();
         }
 
+        public override string ToString()
+        {
+            return name;
+        }
+
     }
 }

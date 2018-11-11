@@ -24,5 +24,18 @@ namespace ForwardChaining
             result = _result;
             flag = Flag.flag0;
         }
+
+        public override string ToString()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(name + ": ");
+            foreach(var fact in requirements)
+            {
+                stringBuilder.Append(fact + ",");
+            }
+            stringBuilder.Append("\b");
+            stringBuilder.Append(" -> "+result);
+            return stringBuilder.ToString();
+        }
     }
 }
