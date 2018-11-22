@@ -26,21 +26,35 @@ namespace ForwardChaining
 
         public void Start()
         {
-            ParseInput("input.txt");
+            ParseInput("input3.txt");
             PrintData();
             Console.WriteLine("2 DALIS. Vykdymas");
             ForwardChain();
             Console.WriteLine("3 DALIS. Rezultatai");
-            Console.WriteLine("\t1) Tikslas "+ result +" išvestas.");
-            Console.Write("\t2) Kelias: ");
-            foreach(var rule in usedRules)
+            if(completed)
             {
-                Console.Write(rule.name + ", ");
+                Console.WriteLine("\t1) Tikslas " + result + " išvestas.");
+                Console.Write("\t2) Kelias: ");
+                if (usedRules.Count == 0)
+                {
+                    Console.WriteLine("Tikslas " + result + " tarp faktų. Kelias tuščias.");
+                }
+                else
+                {
+                    foreach (var rule in usedRules)
+                    {
+                        Console.Write(rule.name + ", ");
+                    }
+                    Console.WriteLine("\b\b.");
+
+                }
             }
-            Console.WriteLine("\b\b.");
+            else
+            {
+                Console.WriteLine("\t1) Tikslas " + result + " nerastas.");
+            }
+            
             Console.ReadLine();
-
-
         }
         
         public void PrintExecution(Rule rule)
@@ -48,17 +62,17 @@ namespace ForwardChaining
             switch(state)
             {
                 case RuleState.UseRaiseFlag1:
-                    Console.Write("\t\t"+rule + " taikome. Pakeliame flag1. Faktai");
+                    Console.Write("\t\t"+rule + " taikome. Pakeliame flag1. Faktai ");
                     foreach(var fact in oldFacts)
                     {
                         Console.Write(fact + ", ");
                     }
-                    Console.Write("\bir ");
+                    Console.Write("\b\b ir ");
                     foreach(var fact in newFacts)
                     {
                         Console.Write(fact + ", ");
                     }
-                    Console.WriteLine("\b.");
+                    Console.WriteLine("\b\b.");
                     break;
                 case RuleState.Flag1:
                     Console.WriteLine("\t\t" + rule + " praleidžiame, nes pakelta flag1(taisyklė panaudota).");
@@ -115,8 +129,15 @@ namespace ForwardChaining
 
         public void ForwardChain()
         {
-            while (progress || !completed)
+            while (progress && !completed)
             {
+                if (facts.Contains(result))
+                {
+                    completed = true;
+                    Console.WriteLine("\t\tTikslas gautas.");
+                    Console.WriteLine();
+                    break;
+                }
                 progress = false;
                 Console.WriteLine();
                 Console.WriteLine("\t"+iteration + " ITERACIJA");
@@ -128,13 +149,13 @@ namespace ForwardChaining
                     }
                     else if(rule.flag == Rule.Flag.flag2)
                     {
-                        state = RuleState.Flag2;
+                        state = RuleState.SkipRaiseFlag2;
                     }
                     else
                     {
                         if (facts.Contains(rule.result))
                         {
-                            state = RuleState.SkipRaiseFlag2;
+                            state = RuleState.Flag2;
                             rule.flag = Rule.Flag.flag2;
                         }
                         else
@@ -147,6 +168,7 @@ namespace ForwardChaining
                                 usedRules.Add(rule);
                                 rule.flag = Rule.Flag.flag1;
                                 PrintExecution(rule);
+                                progress = true;
                                 break;
                             }
                             else
@@ -156,12 +178,6 @@ namespace ForwardChaining
                         }
                     }
                     PrintExecution(rule);  
-                }
-                if (facts.Contains(result))
-                {
-                    completed = true;
-                    Console.WriteLine("\t\tTikslas gautas.");
-                    Console.WriteLine();
                 }
                 iteration++;
             }

@@ -1,0 +1,18 @@
+﻿Studentas Julius Blusevičius, Kompiuterių mokslas 4 kursas 2 grupė. Data: 2018/11/09
+1 testas. Paskaitos pavyzdys
+1) Taisyklės
+Z Y D
+Y X B E
+X A
+L C
+N L M
+
+2) Faktai
+A B C D E
+
+3) Tikslas
+Z
+
+
+
+
